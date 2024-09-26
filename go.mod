@@ -27,8 +27,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/moby/moby v26.0.0+incompatible // indirect
-	github.com/moby/term v0.5.0 // indirect
+	github.com/moby/moby v27.3.1+incompatible // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/vito/go-interact v1.0.0 // indirect
