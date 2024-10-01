@@ -42,7 +42,7 @@ var (
 //
 // Any error handling should be handled with the plugin itself (this means printing user facing errors).
 // The CLI will exit 0 if the plugin exits 0 and will exit 1 should the plugin exits nonzero.
-func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string) {
+func (c *NpsbPlugin) Run(cliConnection plugin.CliConnection, args []string) {
 	httpClient = http.Client{Timeout: time.Duration(HttpTimeoutDefault) * time.Second}
 	if args[0] != "install-plugin" && args[0] != "CLI-MESSAGE-UNINSTALL" {
 		preCheck(cliConnection)
@@ -60,7 +60,7 @@ func (c *SchedulerPlugin) Run(cliConnection plugin.CliConnection, args []string)
 // The second value is a slice of Command structs. Our slice only contains one Command Struct, but could contain any number of them.
 // The first field Name defines the command `cf basic-plugin-command` once installed into the CLI.
 // The second field, HelpText, is used by the core CLI to display help information to the user in the core commands `cf help`, `cf`, or `cf -h`.
-func (c *SchedulerPlugin) GetMetadata() plugin.PluginMetadata {
+func (c *NpsbPlugin) GetMetadata() plugin.PluginMetadata {
 	return plugin.PluginMetadata{
 		Name:          "npsb",
 		Version:       plugin.VersionType{Major: version.GetMajorVersion(), Minor: version.GetMinorVersion(), Build: version.GetPatchVersion()},
@@ -127,9 +127,9 @@ func getSources(cliConnection plugin.CliConnection) {
 		if err != nil {
 			fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to parse response: %s", err)))
 		}
-		table := terminal.NewTable([]string{"Name", "Org", "Space", "Scope"})
+		table := terminal.NewTable([]string{"Name", "Org", "Space", "Scope", "Description"})
 		for _, src := range jsonResponse.Sources {
-			table.Add(src.Source, src.Org, src.Space, src.Scope)
+			table.Add(src.Source, src.Org, src.Space, src.Scope, src.Description)
 		}
 		_ = table.PrintTo(os.Stdout)
 	}
@@ -143,6 +143,6 @@ func main() {
 	// Note: to run the plugin.Start method, we pass in a pointer to the struct implementing the interface defined at "code.cloudfoundry.org/cli/plugin/plugin.go"
 	//
 	// Note: The plugin's main() method is invoked at install time to collect metadata. The plugin will exit 0 and the Run([]string) method will not be invoked.
-	plugin.Start(new(SchedulerPlugin))
+	plugin.Start(new(NpsbPlugin))
 	// Plugin code should be written in the Run([]string) method, ensuring the plugin environment is bootstrapped.
 }
