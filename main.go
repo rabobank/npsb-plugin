@@ -2,11 +2,11 @@ package main
 
 import (
 	"bytes"
-	"code.cloudfoundry.org/cli/cf/i18n"
-	"code.cloudfoundry.org/cli/cf/terminal"
-	"code.cloudfoundry.org/cli/plugin"
-	pluginmodels "code.cloudfoundry.org/cli/plugin/models"
-	"code.cloudfoundry.org/cli/util/configv3"
+	"code.cloudfoundry.org/cli/v8/cf/i18n"
+	"code.cloudfoundry.org/cli/v8/cf/terminal"
+	"code.cloudfoundry.org/cli/v8/plugin"
+	pluginmodels "code.cloudfoundry.org/cli/v8/plugin/models"
+	"code.cloudfoundry.org/cli/v8/util/configv3"
 	"encoding/json"
 	"fmt"
 	"github.com/rabobank/npsb-plugin/version"
@@ -117,19 +117,15 @@ func getSources(cliConnection plugin.CliConnection) {
 			fmt.Println(terminal.FailureColor(fmt.Sprintf("failed response from npsb service: %s", err)))
 			os.Exit(1)
 		}
-		if err != nil {
-			fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to list source network policies: %s", err)))
-			os.Exit(1)
-		}
 		body, _ := io.ReadAll(resp.Body)
 		jsonResponse := SourceListResponse{}
 		err = json.Unmarshal(body, &jsonResponse)
 		if err != nil {
 			fmt.Println(terminal.FailureColor(fmt.Sprintf("failed to parse response: %s", err)))
 		}
-		table := terminal.NewTable([]string{"Name", "Org", "Space", "Scope", "Description"})
+		table := terminal.NewTable([]string{"Name", "Org", "Space", "Description"})
 		for _, src := range jsonResponse.Sources {
-			table.Add(src.Source, src.Org, src.Space, src.Scope, src.Description)
+			table.Add(src.Source, src.Org, src.Space, src.Description)
 		}
 		_ = table.PrintTo(os.Stdout)
 	}
